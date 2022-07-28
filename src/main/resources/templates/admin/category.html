@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+<body class="body">
+<div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+<main class="body-content">
+    <div class="container">
+        <div id="wrapper">
+            <ul>
+                <li th:each="rootCategory : ${categories}">
+                    <h3 th:text="${rootCategory.name}"></h3>
+                    <ul>
+                        <li th:each="mainCategory : ${rootCategory.subCategory}">
+                            <h4 th:text="${mainCategory.name}"></h4>
+                            <ul>
+                                <li th:each="sub : ${mainCategory.subCategory}">
+                                    <h5 th:text="${sub.name}"></h5>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<footer>
+    <div th:replace="fragments/footer :: footer" />
+</footer>
+</body>
+</html>

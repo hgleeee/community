@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<div class="header" th:fragment="bodyHeader">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="/">HG닷컴</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Shop</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#!" th:href="@{/item/total}">유머/정보</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="#!" th:href="@{/item/clothes}">의류</a></li>
+                            <li><a class="dropdown-item" href="#!" th:href="@{/item/bag}">가방</a></li>
+                            <li><a class="dropdown-item" href="#!" th:href="@{/item/accessories}">악세서리</a></li>
+                            <li><a class="dropdown-item" href="#!" th:href="@{/item/etc}">기타</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <button sec:authorize="hasRole('ADMIN')" type="button" class="btn btn-success"
+                            th:onclick="|location.href='@{/admin}'|"> 관리자 페이지 </button>
+                    <button sec:authorize="isAnonymous()" id="btn2" type="button" class="btn btn-outline-dark float-end" th:onclick="|location.href='@{/login}'|">
+                        Login
+                    </button>
+                    <button sec:authorize="isAuthenticated()" id="btn4" type="button"
+                            class="btn btn-outline-dark float-end" th:onclick="|location.href='@{/logout}'|">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
