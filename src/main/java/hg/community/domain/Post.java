@@ -2,6 +2,7 @@ package hg.community.domain;
 
 import hg.community.domain.baseentity.TimeBaseEntity;
 import hg.community.domain.member.Member;
+import hg.community.dto.PostDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,5 +62,10 @@ public class Post extends TimeBaseEntity {
         post.setCategory(category);
         post.setMember(member);
         return post;
+    }
+
+    public PostDto toPostDto() {
+        return new PostDto(id, title, content, member.getNickname(), getCreatedDateTime(), views, likeNum, disLikeNum,
+                category.getParentCategory().getUrlName(), category.getParentCategory().getName());
     }
 }

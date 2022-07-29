@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/header :: header">
+
+<body class="body">
+<header>
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div th:replace="fragments/bodyHeaderCategory :: bodyHeaderCategory" />
+</header><br/><br/>
+<main class="body-content">
+    <div class="container">
+        <div id="wrapper" th:object="${post}">
+            <hr/>
+            <div class="space">
+                <a class="title" th:text="*{title}"></a>
+                <span class="right" th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div> <hr/>
+            <div id="gray">
+                <a class="nickname" th:text="|닉네임 : *{nickname}|"></a>
+                <a th:text="|조회 수 : *{views}|"></a>&nbsp;&nbsp;
+                <a th:text="|공감 수 : *{likeNum}|"></a>
+            </div>
+            <br/><br/>
+            <div> <p th:text="*{content}"></p></div>
+            <br/>
+            <div class="find-btn">
+                <button type="button" class="btn btn-success find-btn1" onclick="location.href='/login'">추천</button>
+                <a th:text="*{likeNum}|"></a>&nbsp;
+                <button type="button" class="btn btn-warning find-btn1" onclick="location.href='/findIdPw'">비추</button>
+                <a th:text="*{dislikeNum}|"></a>
+            </div>
+            <div>
+                <span style="font-size:1.5em; font-weight:bold"><strong>댓글 </strong></span>
+                <span>댓글 개수 : </span><span id="cnt"></span>
+                <div id="comment"></div>
+            </div>
+            <div class="card-body">
+                <form name="comment-form" th:action="@{/comment/write}" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <textarea name="content" class="form-control" rows="3" cols="30" onkeydown="needLogin()"
+                                  placeholder="로그인 후 댓글 작성이 가능합니다." sec:authorize="isAnonymous()"></textarea>
+                        <textarea name="content" class="form-control" rows="3" cols="30"
+                                  placeholder="댓글을 작성해주세요." sec:authorize="isAuthenticated()"></textarea>
+                        <br/>
+                        <p align="right">
+                            <button type="submit" class="btn btn-success">등록</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<footer>
+    <div th:replace="fragments/footer :: footer" />
+</footer>
+</body>
+</html>

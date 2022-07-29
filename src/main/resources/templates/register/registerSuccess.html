@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+회원가입이 완료되었습니다!
+<button th:onclick="|location.href='@{/login}'|" type="button">
+    로그인하러 가기
+</button>
+<button th:onclick="|location.href='@{/}'|" type="button">
+    홈으로 가기
+</button>
+</body>
+</html>

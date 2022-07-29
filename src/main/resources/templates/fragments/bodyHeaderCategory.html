@@ -6,34 +6,15 @@
     <div class="container">
     <nav role="navigation">
         <ul id="main-menu">
-            <li><a href="#">MENU1</a></li>
-            <li><a href="#">MENU2</a>
+            <li th:each="rootCategory : ${categories}">
+                <a href="#" th:text="${rootCategory.name}"></a>
                 <ul class="sub-menu">
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
+                    <li th:each="mainCategory : ${rootCategory.subCategory}">
+                        <a th:href="@{/category/{urlName}(urlName=${mainCategory.urlName})}"
+                           aria-label="submenu" th:text="${mainCategory.name}"></a>
+                    </li>
                 </ul>
             </li>
-            <li><a href="#">MENU3</a>
-                <ul class="sub-menu">
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                </ul>
-            </li>
-            <li><a href="#">MENU4</a>
-                <ul class="sub-menu">
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                    <li><a href="#" aria-label="submenu">submenu</a></li>
-                </ul>
-            </li>
-            <li><a href="#">MENU5</a></li>
-            <li><a href="#">MENU6</a></li>
         </ul>
     </nav>
     </div>

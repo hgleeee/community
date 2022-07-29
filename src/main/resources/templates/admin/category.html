@@ -8,11 +8,21 @@
     <div class="container">
         <div id="wrapper">
             <ul>
+                <button type="submit" class="btn btn-primary btn-small"
+                        th:onclick="|location.href='@{/categories/edit}'|">추가</button>
                 <li th:each="rootCategory : ${categories}">
                     <h3 th:text="${rootCategory.name}"></h3>
+                    <form method="get" th:action="@{/categories/edit}">
+                        <input hidden name="parentCategoryId" th:value="${rootCategory.id}"/>
+                        <button type="submit" class="btn btn-primary btn-small">추가</button>
+                    </form>
                     <ul>
                         <li th:each="mainCategory : ${rootCategory.subCategory}">
                             <h4 th:text="${mainCategory.name}"></h4>
+                            <form method="get" th:action="@{/categories/edit}">
+                                <input hidden name="parentCategoryId" th:value="${mainCategory.id}"/>
+                                <button type="submit" class="btn btn-primary btn-small">추가</button>
+                            </form>
                             <ul>
                                 <li th:each="sub : ${mainCategory.subCategory}">
                                     <h5 th:text="${sub.name}"></h5>

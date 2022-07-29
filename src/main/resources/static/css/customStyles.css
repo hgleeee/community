@@ -38,3 +38,39 @@ a {
     text-decoration-line: none;
     color: black;
 }
+
+.field-error {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.space {
+    padding: 0px 5px;
+    display: flex;
+}
+
+.title {
+    flex-grow: 1;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+#gray {
+    display: flex;
+    height : 40px;
+    padding: 8px 20px;
+    background: #E8E8E8;
+}
+
+.nickname {
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+.find-btn{
+	text-align: center;
+}
+
+.find-btn1{
+	display :inline-block;
+}

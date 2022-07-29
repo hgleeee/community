@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+<body class="body">
+<div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+<br/><br/><br/>
+<main class="body-content">
+    <div class="container">
+        <div id="wrapper">
+            <h3 style="text-align: center;"><a th:text="|카테고리 편집|"></a></h3><br/><br/>
+            <form th:action="@{/categories/edit}" method="post">
+                <label for="name">카테고리 이름</label>
+                <input id="name" type="text" name="name"/>
+                <label for="name">카테고리 url 이름</label>
+                <input id="urlName" type="text" name="urlName"/>
+                <input hidden name="parentCategoryId" th:value="${parentCategoryId}">
+                <br/><br/><br/>
+                <div class="row">
+                    <div class="col">
+                        <button class="w-100 btn btn-primary btn-small" type="submit">추가</button>
+                    </div>
+                    <div class="col">
+                        <button class="w-100 btn btn-secondary btn-small"
+                                th:onclick="|location.href='@{/categories}'|" type="button">돌아가기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<footer>
+    <div th:replace="fragments/footer :: footer" />
+</footer>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+<body>
+<header>
+  <div th:replace="fragments/bodyHeader :: bodyHeader" />
+</header>
+<main class="body-content">
+<div class="container" style="width: 1000px;">
+  <div id="wrapper">
+  <div class="py-5 text-center">
+    <h2>회원 가입</h2>
+  </div>
+
+  <form action="item.html" th:action="@{/register}" th:object="${member}" method="post">
+    <div>
+      <label for="loginId">로그인 ID</label>
+      <input type="text" id="loginId" th:field="*{loginId}"
+             th:errorclass="field-error" class="form-control" placeholder="사용할 ID를 입력하세요.">
+      <div class="field-error" th:errors="*{loginId}">
+        ID 입력 오류
+      </div>
+    </div>
+    <div>
+      <label for="pw">비밀번호</label>
+      <input type="password" id="pw" th:field="*{password}"
+             th:errorclass="field-error" class="form-control" placeholder="사용할 비밀번호를 입력하세요.">
+      <div class="field-error" th:errors="*{password}">
+        비밀번호 오류
+      </div>
+    </div>
+    <div>
+      <label for="confirmPw">비밀번호 확인</label>
+      <input type="password" id="confirmPw" th:field="*{confirmPassword}"
+             th:errorclass="field-error" class="form-control" placeholder="비밀번호를 한 번 더 입력하세요.">
+      <div class="field-error" th:errors="*{confirmPassword}">
+        비밀번호 확인 오류
+      </div>
+    </div>
+    <div>
+      <label for="name">이름</label>
+      <input type="text" id="name" th:field="*{name}"
+             th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+      <div class="field-error" th:errors="*{name}">
+        이름 오류
+      </div>
+    </div>
+    <div>
+      <label for="nickname">닉네임</label>
+      <input type="text" id="nickname" th:field="*{nickname}"
+             th:errorclass="field-error" class="form-control" placeholder="사용할 닉네임을 입력하세요">
+      <div class="field-error" th:errors="*{nickname}">
+        닉네임 오류
+      </div>
+    </div>
+    <div>
+      <label for="birthday">생일</label>
+      <input type="date" id="birthday" th:field="*{birthday}"
+             th:errorclass="field-error" class="form-control">
+      <div class="field-error" th:errors="*{birthday}">
+        생일 오류
+      </div>
+    </div>
+    <div>
+      <label for="front">주민등록번호</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input type="text" id="front" th:field="*{frontSixSSR}"
+                 th:errorclass="field-error" class="form-control" placeholder="주민등록번호 앞">
+        </div>
+        <div class="col-md-6">
+          <input type="password" id="end" th:field="*{endSevenSSR}"
+                 th:errorclass="field-error" class="form-control" placeholder="주민등록번호 뒤">
+        </div>
+      </div>
+      <div class="field-error" th:errors="*{frontSixSSR}">
+        입력 오류
+      </div>
+      <div class="field-error" th:errors="*{endSevenSSR}">
+        입력 오류
+      </div>
+    </div>
+    <hr class="my-4">
+
+    <div class="row">
+      <div class="col">
+        <button class="w-100 btn btn-primary btn-lg" type="submit">회원 가입</button>
+      </div>
+      <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/login}'|" type="button">로그인하러 가기</button>
+      </div>
+    </div>
+
+  </form>
+  </div>
+
+</div> <!-- /container -->
+</main>
+<br/><br/>
+<footer>
+  <div th:replace="fragments/footer :: footer" />
+</footer>
+</body>
+</html>

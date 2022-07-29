@@ -3,9 +3,11 @@ package hg.community.controller;
 import hg.community.PagingConst;
 import hg.community.SearchCondition;
 import hg.community.dto.CategoryDto;
+import hg.community.dto.PostDto;
 import hg.community.dto.PostPreviewDto;
 import hg.community.service.CategoryService;
 import hg.community.service.PostService;
+import hg.community.vo.CategoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -29,6 +32,8 @@ public class PostController {
     public String getPostByCategory(@PageableDefault(page = 1) Pageable pageable,
                                     @PathVariable("categoryUrlName") String urlName,
                                     @ModelAttribute SearchCondition searchCondition, Model model) {
+        List<CategoryVo> categories = categoryService.findCategoryVo();
+        model.addAttribute("categories", categories);
         Optional<CategoryDto> optionalCategory = categoryService.findOneByUrlName(urlName);
         if (optionalCategory.isEmpty()) {
             throw new IllegalStateException("해당 url을 가진 카테고리가 존재하지 않습니다.");
@@ -41,5 +46,14 @@ public class PostController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("mainCategory", urlName);
         return "post/postList";
+    }
+
+    @GetMapping("/post/{postId}")
+    public String getPostDetail(@PathVariable("postId") String postId, Model model) {
+        List<CategoryVo> categories = categoryService.findCategoryVo();
+        model.addAttribute("categories", categories);
+        PostDto post = postService.findOneById(Long.parseLong(postId));
+        model.addAttribute("post", post);
+        return "post/postDetail";
     }
 }

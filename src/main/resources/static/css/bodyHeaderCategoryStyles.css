@@ -11,6 +11,7 @@ body {
   overflow-x: hidden;
 }
 
+
 nav {
   width: 100%;
   display: flex;
@@ -27,6 +28,7 @@ ul, li {
 
 #main-menu > li {
   float: left;
+  width: 140px;
   position: relative;
 }
 
@@ -56,6 +58,7 @@ ul, li {
 
 .sub-menu > li {
   padding: 16px 28px;
+  width: 140px;
   border-bottom: 1px solid rgba(0,0,0,0.15);
 }
 

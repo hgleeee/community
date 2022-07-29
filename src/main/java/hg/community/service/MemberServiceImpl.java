@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +32,9 @@ public class MemberServiceImpl implements MemberService {
         if (memberRepository.findMemberNumBySSR(memberRegisterDto.getFrontSixSSR(), memberRegisterDto.getEndSevenSSR()) != 0) {
             throw new IllegalStateException("이미 가입하신 회원입니다.");
         }
-        GeneralUser user = GeneralUser.createGeneralUser(memberRegisterDto.getName(), memberRegisterDto.getNickname(),
-                memberRegisterDto.getBirthday(), memberRegisterDto.getFrontSixSSR(),
-                memberRegisterDto.getEndSevenSSR(), memberRegisterDto.getLoginId(), memberRegisterDto.getPassword());
-        memberRepository.save(user);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        memberRegisterDto.setPassword(passwordEncoder.encode(memberRegisterDto.getPassword()));
+        memberRepository.save(memberRegisterDto.toEntity());
     }
 
     @Override

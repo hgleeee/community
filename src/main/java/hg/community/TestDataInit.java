@@ -25,7 +25,7 @@ public class TestDataInit {
     @PostConstruct
     public void init() {
         MemberRegisterDto registerForm = new MemberRegisterDto("김철수", "kim", LocalDate.now(),
-                "123123", "9876543", "test", "test");
+                "123123", "9876543", "test", "test", "test");
         memberService.register(registerForm);
 
         CategoryDto root = categoryService.save(new CategoryCreateDto("유머/시사", null, null));
