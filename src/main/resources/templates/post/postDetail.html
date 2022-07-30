@@ -38,6 +38,7 @@
             <div class="card-body">
                 <form name="comment-form" th:action="@{/comment/write}" method="post" autocomplete="off">
                     <div class="form-group">
+                        <input type="hidden" name="idx" th:value="*{id}" />
                         <textarea name="content" class="form-control" rows="3" cols="30" onkeydown="needLogin()"
                                   placeholder="로그인 후 댓글 작성이 가능합니다." sec:authorize="isAnonymous()"></textarea>
                         <textarea name="content" class="form-control" rows="3" cols="30"
@@ -55,5 +56,6 @@
 <footer>
     <div th:replace="fragments/footer :: footer" />
 </footer>
+<script th:src="@{/js/commentDetail.js}"></script>
 </body>
 </html>
