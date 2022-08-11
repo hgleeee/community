@@ -1,5 +1,6 @@
 package hg.community.domain.member;
 
+import hg.community.ExpConst;
 import hg.community.config.Role;
 import hg.community.domain.Comment;
 import hg.community.domain.Post;
@@ -32,6 +33,8 @@ public abstract class Member extends DateBaseEntity {
     private String loginId;
     private String password;
     private int visitCount;
+    private int level;
+    private int exp;
     protected Role role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -40,7 +43,20 @@ public abstract class Member extends DateBaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    public Member(String name, String nickname, LocalDate birthday, String frontSixSSR, String endSevenSSR, String loginId, String password) {
+    /**
+     * 비즈니스 로직
+     * 경험치를 얻는 메소드, 레벨도 그에 맞춰 변화
+     */
+    public void addExp(int addedExp) {
+        if (this.exp == ExpConst.maxExp) {
+            return;
+        }
+        this.exp += addedExp;
+        this.level = exp / 1000 + 1;
+    }
+
+    public Member(String name, String nickname, LocalDate birthday, String frontSixSSR,
+                  String endSevenSSR, String loginId, String password, int level) {
         this.name = name;
         this.nickname = nickname;
         this.birthday = birthday;
@@ -49,6 +65,7 @@ public abstract class Member extends DateBaseEntity {
         this.loginId = loginId;
         this.password = password;
         this.visitCount = 0;
+        this.level = level;
     }
 
     public int increaseVisitCount() {
