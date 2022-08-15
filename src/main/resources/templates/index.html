@@ -10,7 +10,78 @@
 <main class="body-content">
     <div class="container">
         <div id="wrapper">
+            <h4>인기글 최신순</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th width="100">탭</th>
+                    <th width="700">제목</th>
+                    <th>글쓴이</th>
+                    <th>날짜</th>
+                    <th>조회수</th>
+                    <th>추천</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="post:${posts}">
+                    <td><a th:text="${post.parentCategory}"></a></td>
+                    <td><a th:text="${post.title}" th:href="@{/post/{postId}(postId=${post.id})}"></a></td>
+                    <td><a th:text="${post.nickname}"></a></td>
+                    <td><a th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}"></a></td>
+                    <td><a th:text="${post.views}"></a></td>
+                    <td><a th:text="${post.likeNum}"></a></td>
+                </tr>
+                </tbody>
+            </table>
 
+            <form method="get" th:action="@{/}" th:object="${searchCondition}">
+                <div class="mx-auto input-group" >
+                    <select th:field="*{searchTarget}" style="margin-right: 5px;" >
+                        <option value="">==검색 조건==</option>
+                        <option th:each="target : ${T(hg.community.enumtype.SearchTarget).values()}"
+                                th:value="${target}"
+                                th:text="${target}"></option>
+                    </select>
+                    <mx-auto>
+                        <input th:field="*{searchKeyword}" type="text" class="form-control" placeholder="검색 키워드"
+                               aria-label="search" aria-describedby="button-addon2">
+                    </mx-auto>
+                    <button type="submit" class="btn btn-secondary" id="button-addon2">검색</button>
+                </div>
+            </form>
+            <br/>
+            <ul class="pagination pagination-sm">
+                <li class="page-item">
+                    <!-- 첫페이지로 가는 링크 -->
+                    <a class="page-link" th:href="@{/category/{urlName}(urlName='${mainCategory}', page=1)}">
+                        <span>처음으로</span>
+                    </a>
+                </li>
+
+                <li th:class="${posts.first} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="|'${posts.first}' ? '#' : @{/category/{urlName}(urlName='${mainCategory}', page='${posts.number}')}|">  <!-- Page 객체가 제공하는 메서드를 사용할 때 이름이 살짝 변경됨. -->
+                        <span>&lt;</span>
+                    </a>
+                </li>
+
+                <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+                    th:class="${page == posts.number + 1} ? 'page-item active'">
+                    <a class="page-link" th:text="${page}" th:href="|@{/category/{urlName}(urlName='${mainCategory}', page='${page}')}|"></a>
+                </li>
+
+                <li th:class="${posts.last} ? 'disabled'">
+                    <a class="page-link" th:href="|'${posts.last}' ? '#' : @{/category/{urlName}(urlName='${mainCategory}', page=${posts.number + 2})}|">
+                        <span>&gt;</span>
+                    </a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" th:href="|@{/category/{urlName}(urlName='${mainCategory}', page='${posts.totalPages}')}|">
+                        <span>맨 끝</span>
+                    </a>
+                </li>
+            </ul>
+        </div><br/><hr/>
         </div>
     </div>
 </main>

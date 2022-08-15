@@ -1,9 +1,11 @@
 package hg.community.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import hg.community.domain.member.Member;
-import hg.community.domain.member.QMember;
+import hg.community.domain.Member;
+import hg.community.domain.QMember;
+import hg.community.dto.IdNameGradeOfMemberDto;
 import hg.community.dto.MemberDto;
+import hg.community.dto.QIdNameGradeOfMemberDto;
 import hg.community.dto.QMemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,7 +15,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static hg.community.domain.member.QMember.*;
+import static hg.community.domain.QMember.member;
+
 
 @Repository
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
@@ -32,7 +35,8 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                     member.nickname,
                     member.birthday,
                     member.loginId,
-                    member.password
+                    member.password,
+                    member.role
                 ))
                 .from(member)
                 .where(member.loginId.eq(loginId))
@@ -54,5 +58,19 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .from(member)
                 .where(member.frontSixSSR.eq(sixSSR).and(member.endSevenSSR.eq(sevenSSR)))
                 .fetchOne();
+    }
+
+    @Override
+    public List<IdNameGradeOfMemberDto> findIdNameGradeByRefer(String refer) {
+        return queryFactory
+                .select(new QIdNameGradeOfMemberDto(
+                        member.id,
+                        member.loginId,
+                        member.name,
+                        member.role
+                ))
+                .from(member)
+                .where(member.loginId.contains(refer).or(member.name.contains(refer)))
+                .fetch();
     }
 }

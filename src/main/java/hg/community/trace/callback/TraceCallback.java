@@ -1,4 +1,4 @@
-package hello.proxy.trace.callback;
+package hg.community.trace.callback;
 
 public interface TraceCallback<T> {
     T call();

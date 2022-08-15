@@ -1,18 +1,15 @@
 package hg.community.service;
 
-import hg.community.PagingConst;
+import hg.community.constant.ExpConst;
 import hg.community.domain.Comment;
 import hg.community.domain.Post;
-import hg.community.domain.member.Member;
+import hg.community.domain.Member;
 import hg.community.dto.CommentDto;
 import hg.community.dto.CommentRegisterDto;
 import hg.community.repository.CommentRepository;
 import hg.community.repository.MemberRepository;
 import hg.community.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
             throw new IllegalStateException("존재하지 않는 회원입니다.");
         }
         Comment comment = Comment.createComment(commentRegisterDto.getContent(), optionalPost.get(), optionalMember.get());
+        optionalMember.get().addExp(ExpConst.commentExp);
         return commentRepository.save(comment).getId();
     }
 

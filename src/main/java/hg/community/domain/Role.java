@@ -1,14 +1,14 @@
-package hg.community.config;
+package hg.community.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum Role {
     ADMIN("ROLE_ADMIN"),
-    USER("ROLE_USER"),
-    MANAGER("ROLE_MANAGER");
+    MANAGER("ROLE_MANAGER"),
+    USER("ROLE_USER");
 
     private String value;
 }

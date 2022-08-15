@@ -1,12 +1,10 @@
 package hg.community.domain;
 
 import hg.community.domain.baseentity.TimeBaseEntity;
-import hg.community.domain.member.Member;
 import hg.community.dto.PostDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -46,15 +44,24 @@ public class Post extends TimeBaseEntity {
     /** 연관관계 편의 메서드 시작 */
     private void setMember(Member member) {
         this.member = member;
-        this.member.getPosts().add(this);
+        //member.getPosts().add(this);
     }
 
     private void setCategory(Category category) {
         this.category = category;
-        this.category.getPosts().add(this);
+        //category.getPosts().add(this);
     }
     /** 연관관계 편의 메서드 끝 */
 
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
+    }
+    public void setDisLikeNum(int disLikeNum) {
+        this.disLikeNum = disLikeNum;
+    }
+    public void setHotIssueTime(LocalDateTime localDateTime) {
+        this.hotIssueTime = localDateTime;
+    }
     public static Post createPost(String title, String content, Member member, Category category) {
         Post post = new Post();
         post.title = title;

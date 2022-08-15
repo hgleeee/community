@@ -3,11 +3,11 @@ $(document).ready(function() {
 })
 
 function getMemberList() {
-    const sub = $('#search').val();
+    const refer = $('#search').val();
     $.ajax({
         type: 'GET',
         url: '/admin/authorize/getMemberList',
-        data: {sub},
+        data: {refer},
         success: function(result) {
             $('#memberList').empty()
             if (result.length > 0) {
@@ -15,8 +15,8 @@ function getMemberList() {
                     let id = result[i].id;
                     let loginId = result[i].loginId;
                     let name = result[i].name;
-                    let memberGrade = result[i].memberGrade;
-                    getMemberHtml(id, loginId, name, memberGrade);
+                    let role = result[i].role;
+                    getMemberHtml(id, loginId, name, role);
                 }
             } else {
                 $("#memberList").append("해당되는 구성원이 없습니다.");
@@ -29,10 +29,10 @@ function getMemberList() {
     })
 }
 
-function getMemberHtml(id, loginId, name, memberGrade) {
+function getMemberHtml(id, loginId, name, role) {
     let memberHtml = "<a href='/admin/authorize/" + id + "'><ul class='memberList'> <li class='loginId'>" +
                 loginId + "</li><li class='name'>" +
                 name + "</li><li class='memberGrade'>" +
-                memberGrade + "</li></ul></a>";
+                role + "</li></ul></a>";
     $("#memberList").append(memberHtml);
 }

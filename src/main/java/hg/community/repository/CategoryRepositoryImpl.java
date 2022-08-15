@@ -4,7 +4,9 @@ import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hg.community.domain.QCategory;
 import hg.community.dto.CategoryDto;
+import hg.community.dto.MainCategoryNoticeIdDto;
 import hg.community.dto.QCategoryDto;
+import hg.community.dto.QMainCategoryNoticeIdDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -43,18 +45,53 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
 
     @Override
     public Optional<CategoryDto> findOneByUrlName(String urlName) {
+        QCategory parent = new QCategory("p"), child = new QCategory("c");
         return Optional.ofNullable(queryFactory
                 .select(new QCategoryDto(
-                        category.id,
-                        category.name,
-                        category.urlName,
-                        category.depth,
-                        category.parentCategory.id,
-                        category.parentCategory.name
+                        child.id,
+                        child.name,
+                        child.urlName,
+                        child.depth,
+                        child.parentCategory.id,
+                        child.parentCategory.name
                 ))
-                .from(category)
-                .leftJoin(category.parentCategory, category)
-                .where(category.depth.eq(1).and(category.urlName.eq(urlName)))
+                .from(child)
+                .leftJoin(child.parentCategory, parent)
+                .where(child.depth.eq(1).and(child.urlName.eq(urlName)))
                 .fetchOne());
+    }
+
+    @Override
+    public List<CategoryDto> findSubCategoriesByMainCategoryOrderByCreatedTimeAsc(String mainCategoryName) {
+        QCategory parent = new QCategory("p"), child = new QCategory("c");
+        return queryFactory
+                .select(new QCategoryDto(
+                        child.id,
+                        child.name,
+                        child.urlName,
+                        child.depth,
+                        child.parentCategory.id,
+                        child.parentCategory.name
+                ))
+                .from(child)
+                .leftJoin(child.parentCategory, parent)
+                .where(child.parentCategory.urlName.eq(mainCategoryName).and(child.depth.eq(2)))
+                .orderBy(child.createdDateTime.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<MainCategoryNoticeIdDto> findMainCategoryNoticeId() {
+        QCategory parent = new QCategory("p"), child = new QCategory("c");
+        return queryFactory
+                .select(new QMainCategoryNoticeIdDto(
+                        child.parentCategory.name,
+                        child.id
+                ))
+                .from(child)
+                .leftJoin(child.parentCategory, parent)
+                .where(child.urlName.eq("notice").and(child.depth.eq(2)))
+                .orderBy(child.createdDateTime.asc())
+                .fetch();
     }
 }

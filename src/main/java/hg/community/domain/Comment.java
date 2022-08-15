@@ -1,7 +1,6 @@
 package hg.community.domain;
 
 import hg.community.domain.baseentity.TimeBaseEntity;
-import hg.community.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

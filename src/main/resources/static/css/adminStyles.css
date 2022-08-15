@@ -26,7 +26,6 @@ nav a, nav span {
     color: #ffffcc;
 }
 ul {
-    list-style-type: none;
     padding: 0;
 }
 nav {
@@ -77,4 +76,48 @@ nav .side-menu .menu-dropdown .dropdown li a::before{
 }
 nav .side-menu .menu-dropdown .dropdown {
     display: none;
+}
+
+section {
+    height: 100%;
+    padding: 50px 30px;
+    background-color: var(--section-background-color);
+    display: grid;
+    gap: 30px 30px;
+    align-items: stretch;
+}
+
+table {
+    width: 100%;
+    border-top: 1px solid var(--table-line-color);
+    border-collapse: collapse;
+    font-size: 15px;
+}
+tr {
+    border-top: 1px solid var(--table-line-color);
+}
+th, td {
+    padding: 10px 0;
+    text-align: center;
+    vertical-align: middle;
+}
+th {
+    font-size: 18px;
+    border-bottom: 2px solid var(--table-line-color);
+}
+
+img {
+    display: inline-block;
+    width: 150px;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.detail-body {
+    width:700px;
+    padding-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
 }

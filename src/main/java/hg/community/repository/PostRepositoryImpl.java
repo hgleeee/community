@@ -3,10 +3,13 @@ package hg.community.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hg.community.constant.BestPostConst;
 import hg.community.SearchCondition;
 import hg.community.domain.QCategory;
 import hg.community.dto.PostPreviewDto;
+import hg.community.dto.PostSimplePreviewDto;
 import hg.community.dto.QPostPreviewDto;
+import hg.community.dto.QPostSimplePreviewDto;
 import hg.community.enumtype.SearchTarget;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +19,13 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static hg.community.domain.QCategory.*;
+import static hg.community.domain.QMember.*;
 import static hg.community.domain.QPost.*;
-import static hg.community.domain.member.QMember.*;
 
 @Repository
 public class PostRepositoryImpl implements PostRepositoryCustom {
@@ -32,11 +37,12 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Page<PostPreviewDto> findBestPostOrderByBestTime(Pageable pageable, String categoryName, SearchCondition searchCondition) {
+    public Page<PostPreviewDto> findBestPostOrderByBestTime(Pageable pageable, SearchCondition searchCondition) {
         List<PostPreviewDto> content = queryFactory
                 .select(new QPostPreviewDto(
                         post.id,
                         post.title,
+                        post.comments.size(),
                         post.member.nickname,
                         post.createdDateTime,
                         post.views,
@@ -47,8 +53,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(post.member, member)
                 .join(post.category, category)
                 .where(
-                        post.likeNum.goe(100),
-                        post.category.name.eq(categoryName),
+                        post.likeNum.goe(BestPostConst.NUM),
                         searchConditionFit(searchCondition)
                 )
                 .orderBy(post.hotIssueTime.desc())
@@ -62,7 +67,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(post.member, member)
                 .join(post.category, category)
                 .where(
-                        post.category.name.eq(categoryName),
                         searchConditionFit(searchCondition)
                 )
                 .offset(pageable.getOffset())
@@ -78,6 +82,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .select(new QPostPreviewDto(
                         post.id,
                         post.title,
+                        post.comments.size(),
                         post.member.nickname,
                         post.createdDateTime,
                         post.views,
@@ -110,6 +115,54 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Optional<String> findContentById(Long id) {
+        return Optional.ofNullable(queryFactory
+                .select(post.content)
+                .from(post)
+                .where(post.id.eq(id))
+                .fetchOne());
+    }
+
+    @Override
+    public List<PostSimplePreviewDto> findBestPostByCategoryNameOrderByLikeNum(String mainCategoryUrl, int days) {
+        QCategory mainCategory = new QCategory("m");
+        QCategory subCategory = new QCategory("s");
+        return queryFactory
+                .select(new QPostSimplePreviewDto(
+                        post.id,
+                        post.title,
+                        post.likeNum
+                ))
+                .from(post)
+                .join(post.category, subCategory)
+                .join(post.category.parentCategory, mainCategory)
+                .where(simplePostConditionFit(mainCategoryUrl, days))
+                .orderBy(post.likeNum.desc())
+                .limit(BestPostConst.CNT)
+                .fetch();
+    }
+
+    @Override
+    public Integer findLikeOrDislikeNumById(Long postId, Boolean isLike) {
+        if (isLike) {
+            return queryFactory
+                    .select(post.likeNum.count().intValue())
+                    .from(post)
+                    .where(post.id.eq(postId))
+                    .fetchOne();
+        }
+        return queryFactory
+                .select(post.disLikeNum.count().intValue())
+                .from(post)
+                .where(post.id.eq(postId))
+                .fetchOne();
+    }
+
+    private BooleanExpression simplePostConditionFit(String mainCategoryUrl, int days) {
+        return post.category.parentCategory.urlName.eq(mainCategoryUrl)
+                .and(post.createdDateTime.after(LocalDateTime.now().minusDays(days)));
+    }
     private BooleanExpression searchConditionFit(SearchCondition searchCondition) {
         String keyword = searchCondition.getSearchKeyword();
         if (!StringUtils.hasText(keyword) || searchCondition.getSearchTarget().equals(null)) {

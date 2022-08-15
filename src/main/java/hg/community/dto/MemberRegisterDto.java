@@ -1,6 +1,7 @@
 package hg.community.dto;
 
-import hg.community.domain.member.GeneralUser;
+import hg.community.domain.Member;
+import hg.community.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,7 @@ public class MemberRegisterDto {
     @NotEmpty
     private String confirmPassword;
 
-    public GeneralUser toEntity() {
-        return GeneralUser.createGeneralUser(name, nickname, birthday, frontSixSSR, endSevenSSR, loginId, password);
+    public Member toEntity() {
+        return Member.createMember(name, nickname, birthday, frontSixSSR, endSevenSSR, loginId, password, Role.USER);
     }
 }

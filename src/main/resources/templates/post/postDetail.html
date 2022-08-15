@@ -19,19 +19,24 @@
             <div id="gray">
                 <a class="nickname" th:text="|닉네임 : *{nickname}|"></a>
                 <a th:text="|조회 수 : *{views}|"></a>&nbsp;&nbsp;
-                <a th:text="|공감 수 : *{likeNum}|"></a>
+                <a id="titleLike" th:text="|공감 수 : *{likeNum}|"></a>
             </div>
             <br/><br/>
-            <div> <p th:text="*{content}"></p></div>
+            <div id="content"> </div>
             <br/>
             <div class="find-btn">
-                <button type="button" class="btn btn-success find-btn1" onclick="location.href='/login'">추천</button>
-                <a th:text="*{likeNum}|"></a>&nbsp;
-                <button type="button" class="btn btn-warning find-btn1" onclick="location.href='/findIdPw'">비추</button>
-                <a th:text="*{dislikeNum}|"></a>
-            </div>
+                <button type="button" class="btn btn-success find-btn1" th:onclick="|clickLikeOrDislike(*{id}, true)|">추천</button>
+                <span id="likeNum" th:value="*{likeNum}" th:text="*{likeNum}"></span>&nbsp;
+                <button type="button" class="btn btn-warning find-btn1" th:onclick="|clickLikeOrDislike(*{id}, false)|">비추</button>
+                <span id="dislikeNum" th:value="*{dislikeNum}" th:text="*{dislikeNum}"></span>
+            </div><br/>
+            <div style="display: flex">
+                <button type="button" class="btn btn-secondary"
+                        th:onclick="|location.href='@{/category/{mainCategory}(mainCategory=${post.mainCategoryUrlName})}'|"
+                        style="margin-left: auto;">목록으로</button>
+            </div><br/><hr/>
             <div>
-                <span style="font-size:1.5em; font-weight:bold"><strong>댓글 </strong></span>
+                <span style="font-size:1.2em; font-weight:bold"><strong>댓글 </strong></span>
                 <span>댓글 개수 : </span><span id="cnt"></span>
                 <div id="comment"></div>
             </div>
@@ -40,13 +45,13 @@
                     <div class="form-group">
                         <input type="hidden" name="idx" th:value="*{id}" />
                         <textarea name="content" class="form-control" rows="3" cols="30" onkeydown="needLogin()"
-                                  placeholder="로그인 후 댓글 작성이 가능합니다." sec:authorize="isAnonymous()"></textarea>
+                                  placeholder="로그인 후 댓글 작성이 가능합니다." th:if="!isAuthenticated"></textarea>
                         <textarea name="content" class="form-control" rows="3" cols="30"
-                                  placeholder="댓글을 작성해주세요." sec:authorize="isAuthenticated()"></textarea>
+                                  placeholder="댓글을 작성해주세요." th:if="isAuthenticated"></textarea>
                         <br/>
-                        <p align="right">
-                            <button type="submit" class="btn btn-success">등록</button>
-                        </p>
+                        <div style="display: flex;">
+                            <button type="submit" class="btn btn-success" style="margin-left: auto;">등록</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -56,6 +61,12 @@
 <footer>
     <div th:replace="fragments/footer :: footer" />
 </footer>
+<script th:inline="javascript">
+    const content = [[${post.content}]];
+    $("#content").html(content);
+</script>
+<script th:src="@{/js/clickLikeOrDislike.js}"></script>
+<script th:src="@{/js/needLogin.js}"></script>
 <script th:src="@{/js/commentDetail.js}"></script>
 </body>
 </html>

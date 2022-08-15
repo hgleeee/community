@@ -1,7 +1,9 @@
 package hg.community.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import hg.community.domain.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,13 +18,16 @@ public class MemberDto {
     LocalDate birthday;
     String loginId;
     String password;
+    Role role;
 
     @QueryProjection
-    public MemberDto(String name, String nickname, LocalDate birthday, String loginId, String password) {
+    @Builder
+    public MemberDto(String name, String nickname, LocalDate birthday, String loginId, String password, Role role) {
         this.name = name;
         this.nickname = nickname;
         this.birthday = birthday;
         this.loginId = loginId;
         this.password = password;
+        this.role = role;
     }
 }

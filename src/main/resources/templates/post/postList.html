@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"></html>
 <head th:replace="fragments/header :: header">
 
 <body class="body">
@@ -10,6 +10,53 @@
 <main class="body-content">
     <div class="container">
     <div id="wrapper">
+        <div class="row">
+            <div class="col-4">
+                <table class="table table-borderless table-sm">
+                    <thead>
+                    <tr>
+                        <th> <a style="font-size: 1.2em;"> 오늘의 인기글 </a> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="post:${bestPostsToday}">
+                        <td><a th:href="@{/post/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+                            <span class="badge bg-info" th:text="|좋아요 ${post.likeNum}|"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4">
+                <table class="table table-borderless table-sm">
+                    <thead>
+                    <tr>
+                        <th> <a style="font-size: 1.2em;"> 주간 인기글 </a> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="post:${bestPostsWeek}">
+                        <td><a th:href="@{/post/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+                            <span class="badge bg-info" th:text="|좋아요 ${post.likeNum}|"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4">
+                <table class="table table-borderless table-sm">
+                    <thead>
+                    <tr>
+                        <th> <a style="font-size: 1.2em;">월간 인기글</a> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="post:${bestPostsMonth}">
+                        <td><a th:href="@{/post/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+                            <span class="badge bg-info" th:text="|좋아요 ${post.likeNum}|"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div th:text="${mainCategory}"></div><br/>
         <table class="table table-striped">
             <thead>
@@ -33,11 +80,35 @@
             </tr>
             </tbody>
         </table>
+
+        <div style="display: flex;">
+
+            <button class="btn btn-success" style="margin-left: auto;"
+                    th:if="${!isAuthenticated}" onclick="needLogin()">글쓰기</button>
+            <button class="btn btn-success" style="margin-left: auto;"
+                    th:if="${isAuthenticated}"
+                    th:onclick="|location.href='@{/category/{urlName}/register(urlName=${mainCategory})}'|">글쓰기</button>
+        </div>
+        <form method="get" th:action="@{/category/{urlName}(urlName=${mainCategory})}" th:object="${searchCondition}">
+            <div class="mx-auto input-group" >
+                <select th:field="*{searchTarget}" style="margin-right: 5px;" >
+                    <option value="">==검색 조건==</option>
+                    <option th:each="target : ${T(hg.community.enumtype.SearchTarget).values()}"
+                            th:value="${target}"
+                            th:text="${target}"></option>
+                </select>
+                <mx-auto>
+                    <input th:field="*{searchKeyword}" type="text" class="form-control" placeholder="검색 키워드"
+                           aria-label="search" aria-describedby="button-addon2">
+                </mx-auto>
+                <button type="submit" class="btn btn-secondary" id="button-addon2">검색</button>
+            </div>
+        </form>
         <br/>
         <ul class="pagination pagination-sm">
             <li class="page-item">
                 <!-- 첫페이지로 가는 링크 -->
-                <a class="page-link" th:href="|@{/category/{urlName}(urlName='${mainCategory}', page=1}|">
+                <a class="page-link" th:href="@{/category/{urlName}(urlName='${mainCategory}', page=1)}">
                     <span>처음으로</span>
                 </a>
             </li>
@@ -65,11 +136,12 @@
                 </a>
             </li>
         </ul>
-    </div>
+    </div><br/><hr/>
     </div>
 </main>
 <footer>
     <div th:replace="fragments/footer :: footer" />
 </footer>
+<script th:src="@{/js/needLogin.js}"></script>
 </body>
 </html>

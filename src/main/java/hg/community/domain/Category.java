@@ -16,7 +16,6 @@ public class Category extends TimeBaseEntity {
 
     @Id @GeneratedValue
     private Long id;
-
     private String name;
     private String urlName;
     private int depth;

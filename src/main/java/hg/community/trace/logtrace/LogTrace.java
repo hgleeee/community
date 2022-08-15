@@ -1,6 +1,7 @@
-package hello.proxy.trace.logtrace;
+package hg.community.trace.logtrace;
 
-import hello.proxy.trace.TraceStatus;
+
+import hg.community.trace.TraceStatus;
 
 public interface LogTrace {
 

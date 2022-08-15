@@ -1,11 +1,7 @@
-package hg.community.domain.member;
+package hg.community.domain;
 
-import hg.community.ExpConst;
-import hg.community.config.Role;
-import hg.community.domain.Comment;
-import hg.community.domain.Post;
+import hg.community.constant.ExpConst;
 import hg.community.domain.baseentity.DateBaseEntity;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +15,7 @@ import java.util.List;
 @DiscriminatorColumn
 @Getter
 @NoArgsConstructor
-public abstract class Member extends DateBaseEntity {
+public class Member extends DateBaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
@@ -35,7 +31,7 @@ public abstract class Member extends DateBaseEntity {
     private int visitCount;
     private int level;
     private int exp;
-    protected Role role;
+    private Role role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
@@ -55,17 +51,38 @@ public abstract class Member extends DateBaseEntity {
         this.level = exp / 1000 + 1;
     }
 
-    public Member(String name, String nickname, LocalDate birthday, String frontSixSSR,
-                  String endSevenSSR, String loginId, String password, int level) {
-        this.name = name;
-        this.nickname = nickname;
-        this.birthday = birthday;
-        this.frontSixSSR = frontSixSSR;
-        this.endSevenSSR = endSevenSSR;
-        this.loginId = loginId;
-        this.password = password;
-        this.visitCount = 0;
-        this.level = level;
+    public void updateRoleByAdmin(String role) {
+        if (role.equals("admin")) {
+            this.role = Role.ADMIN;
+        } else if (role.equals("manager")) {
+            this.role = Role.MANAGER;
+        } else {
+            this.role = Role.USER;
+        }
+    }
+
+    public static Member createMember(String name, String nickname, LocalDate birthday, String frontSixSSR, String endSevenSSR,
+                                      String loginId, String password, Role role) {
+        Member member = new Member();
+        member.name = name;
+        member.nickname = nickname;
+        member.birthday = birthday;
+        member.frontSixSSR = frontSixSSR;
+        member.endSevenSSR = endSevenSSR;
+        member.loginId = loginId;
+        member.password = password;
+        member.role = role;
+        if (role == Role.MANAGER) {
+            member.exp = ExpConst.maxExp;
+            member.level = 9999;
+        } else if (role == Role.ADMIN) {
+            member.exp = ExpConst.maxExp;
+            member.level = 99999;
+        } else {
+            member.exp = 0;
+            member.level = 1;
+        }
+        return member;
     }
 
     public int increaseVisitCount() {

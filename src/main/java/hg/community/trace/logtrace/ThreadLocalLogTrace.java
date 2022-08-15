@@ -1,7 +1,7 @@
-package hello.proxy.trace.logtrace;
+package hg.community.trace.logtrace;
 
-import hello.proxy.trace.TraceId;
-import hello.proxy.trace.TraceStatus;
+import hg.community.trace.TraceId;
+import hg.community.trace.TraceStatus;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

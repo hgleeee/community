@@ -15,11 +15,12 @@ function getCommentList() {
             if (cnt > 0) {
                 for (var i = 0; i < cnt; i++) {
                     str += "<div>";
-                    str += "<div class='space'><a class='nickname'>" + result[i].memberNickname+"</a>";
-                    str += "<span>" + result[i].registerTime + " </span>&nbsp;&nbsp;"
+                    str += "<div class='space'><a class='nickname'>" + levelExp(result[i].memberLevel)
+                        + "&nbsp;" + result[i].memberNickname+"</a>";
+                    str += "<span>" + timeCompareToNow(result[i].registerTime) + " </span>&nbsp;&nbsp;"
                     str += "<span> 공감 수: " + result[i].likeNum + "</span>"
                     str += "</div>";
-                    str += result[i].content + "</div>";
+                    str += "&nbsp;&nbsp;" + result[i].content + "</div>";
                 }
             } else {
                 str += "<div>";
@@ -37,4 +38,30 @@ function getCommentList() {
     })
 }
 
-function timeTo
+function levelExp(level) {
+    if (level == 9999) {
+        return "Lv. 게시판지기";
+    }
+    if (level == 99999) {
+        return "Lv. 운영자";
+    }
+    return "Lv. " + level;
+}
+
+function timeCompareToNow(time) {
+    let now = new Date();
+    let time1 = new Date(time);
+    if (now.getFullYear() - time1.getFullYear() != 0) {
+        return now.getFullYear() - time1.getFullYear() + "년 전";
+    }
+    if (now.getMonth() - time1.getMonth() != 0) {
+        return now.getMonth() - time1.getMonth() + "개월 전";
+    }
+    if (now.getHours() - time1.getHours() != 0) {
+        return now.getHours() - time1.getHours() + "시간 전";
+    }
+    if (now.getMinutes() - time1.getMinutes() != 0) {
+        return now.getMinutes() - time1.getMinutes() + "분 전";
+    }
+    return now.getSeconds() - time1.getSeconds() + "초 전";
+}

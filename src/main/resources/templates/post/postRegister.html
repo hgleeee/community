@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title> HG닷컴 - 글쓰기 </title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/css/styles.css}" href="/css/styles.css" rel="stylesheet" />
+    <link th:href="@{/css/bodyHeaderCategoryStyles.css}" href="/css/styles.css" rel="stylesheet" />
+    <link th:href="@{/css/customStyles.css}" href="/css/styles.css" rel="stylesheet" />
+    <!-- include libraries(jQuery, bootstrap) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
-<body>
 
+<body class="body">
+<header>
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div th:replace="fragments/bodyHeaderCategory :: bodyHeaderCategory" />
+</header><br/><br/>
+<main class="body-content">
+    <div class="container">
+        <div id="wrapper">
+            <form method="post" th:object="${post}"
+                  th:action="@{/category/{categoryUrlName}/register(categoryUrlName=${categoryUrlName})}">
+                <input type="hidden" id="categoryId" name="categoryId"/>
+                <select class="form-control" onchange="setCategoryId(this.value)">
+                    <option value="">=====세부 카테고리를 선택해주세요=====</option>
+                    <option th:each="subCategory : ${subCategories}"
+                            th:value="${subCategory.id}"
+                            th:text="${subCategory.name}">option
+                    </option>
+                </select>
+                <hr/>
+                <label for="title">제목:</label>
+                <input id="title" type="text" class="form-control"
+                       style="font-weight: bold;" name="title" th:value="*{title}"/>
+
+                <hr/>
+                <label for="summernote">내용:</label>
+                    <textarea id="summernote" name="content" th:value="*{content}"></textarea>
+                <button class="btn btn-primary" type="submit">작성</button>
+            </form>
+            <br/><br/>
+            <br/>
+        </div>
+    </div>
+</main>
+<footer>
+    <div th:replace="fragments/footer :: footer" />
+</footer>
+<script>
+    function setCategoryId(value) {
+        $("#categoryId").val(value);
+    }
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 300,
+            minHeight: null,
+            maxHeight: null,
+            focus: true
+        });
+    });
+</script>
 </body>
 </html>

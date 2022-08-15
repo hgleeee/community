@@ -1,7 +1,7 @@
-package hello.proxy.trace.callback;
+package hg.community.trace.callback;
 
-import hello.proxy.trace.TraceStatus;
-import hello.proxy.trace.logtrace.LogTrace;
+import hg.community.trace.TraceStatus;
+import hg.community.trace.logtrace.LogTrace;
 
 public class TraceTemplate {
 

@@ -3,6 +3,7 @@ package hg.community.service;
 import hg.community.domain.Category;
 import hg.community.dto.CategoryCreateDto;
 import hg.community.dto.CategoryDto;
+import hg.community.dto.MainCategoryNoticeIdDto;
 import hg.community.repository.CategoryRepository;
 import hg.community.vo.CategoryVo;
 import lombok.RequiredArgsConstructor;
@@ -57,12 +58,11 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryDto> categoryList = categoryRepository.findAllOrderByCreatedDateAsc();
         List<CategoryVo> categories = new ArrayList<>();
         for (CategoryDto category : categoryList) {
-            System.out.println(category.getId() + " " + category.getName() + " " + category.getDepth());
             if (category.getDepth() == 0) {
                 categories.add(new CategoryVo(category.getId(), category.getName(), category.getUrlName()));
             } else if (category.getDepth() == 1) {
                 for (CategoryVo depthZero : categories) {
-                    if (depthZero.getId() == category.getParentCategoryId()) {
+                    if (depthZero.getId().equals(category.getParentCategoryId())) {
                         depthZero.beSub(new CategoryVo(category.getId(), category.getName(), category.getUrlName()));
                         break;
                     }
@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
                 boolean isBreak = false;
                 for (CategoryVo depthZero : categories) {
                     for (CategoryVo depthOne : depthZero.getSubCategory()) {
-                        if (depthOne.getId() == category.getParentCategoryId()) {
+                        if (depthOne.getId().equals(category.getParentCategoryId())) {
                             isBreak = true;
                             depthOne.beSub(new CategoryVo(category.getId(), category.getName(), category.getUrlName()));
                             break;
@@ -82,5 +82,15 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
         return categories;
+    }
+
+    @Override
+    public List<CategoryDto> findSubCategoriesByMainCategoryOrderByCreatedTimeAsc(String mainCategoryName) {
+        return categoryRepository.findSubCategoriesByMainCategoryOrderByCreatedTimeAsc(mainCategoryName);
+    }
+
+    @Override
+    public List<MainCategoryNoticeIdDto> findMainCategoryNoticeId() {
+        return categoryRepository.findMainCategoryNoticeId();
     }
 }
