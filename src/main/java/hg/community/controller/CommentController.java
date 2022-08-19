@@ -28,12 +28,18 @@ public class CommentController {
     @PostMapping("/write")
     public String insertReview(@RequestParam("idx") Long postId,
                                @RequestParam("content") String content,
+                               @RequestParam(name = "parentComment", required = false) Long parentCommentId,
                                HttpSession session) {
         MyAuthentication auth = SessionUtils.getLoginMember(session);
         if (auth == null) {
-            throw new IllegalStateException("잘못된 접근입니다.");
+            throw new RuntimeException("잘못된 접근입니다.");
         }
-        commentService.save(new CommentRegisterDto(auth.getLoginId(), postId, content));
+        commentService.save(CommentRegisterDto.builder()
+                .loginId(auth.getLoginId())
+                .postId(postId)
+                .content(content)
+                .parentCommentId(parentCommentId)
+                .build());
         return "redirect:/post/" + postId;
     }
 

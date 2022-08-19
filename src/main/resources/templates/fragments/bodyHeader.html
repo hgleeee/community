@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <div class="header" th:fragment="bodyHeader">
     <!-- Navigation-->
     <nav class="navbar navbar-light bg-light">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="/">HG닷컴</a>
+            <div id="socketAlert"> <a>안녕</a> </div>
             <div style="display: flex;">
                 <div style="margin-left: auto">
                     <button th:if="${isAdmin}" type="button" class="btn btn-success"

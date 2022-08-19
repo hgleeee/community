@@ -19,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
@@ -88,12 +90,14 @@ public class PostController {
 
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable("postId") String postId,
-                                HttpSession session, Model model) {
+                                HttpSession session, Model model, HttpServletResponse response) throws Exception {
         List<CategoryVo> categories = categoryService.findCategoryVo();
         model.addAttribute("categories", categories);
         PostDto post = postService.findOneById(Long.parseLong(postId));
         model.addAttribute("post", post);
         AuthorityUtils.checkAuthority(session, model);
+        String loginId = SessionUtils.getLoginMember(session).getLoginId();
+        model.addAttribute("loginId", loginId);
         return "post/postDetail";
     }
 

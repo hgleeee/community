@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
 
 <body class="body">
@@ -10,25 +9,25 @@
 </header><br/><br/>
 <main class="body-content">
     <div class="container">
-        <div id="wrapper" th:object="${post}">
+        <div id="wrapper">
             <hr/>
             <div class="space">
-                <a class="title" th:text="*{title}"></a>
+                <a class="title" th:text="${post.title}"></a>
                 <span class="right" th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
             </div> <hr/>
             <div id="gray">
-                <a class="nickname" th:text="|닉네임 : *{nickname}|"></a>
-                <a th:text="|조회 수 : *{views}|"></a>&nbsp;&nbsp;
-                <a id="titleLike" th:text="|공감 수 : *{likeNum}|"></a>
+                <a class="nickname" th:text="|닉네임 : ${post.nickname}|"></a>
+                <a th:text="|조회 수 : ${post.views}|"></a>&nbsp;&nbsp;
+                <a id="titleLike" th:text="|공감 수 : ${post.likeNum}|"></a>
             </div>
             <br/><br/>
             <div id="content"> </div>
             <br/>
             <div class="find-btn">
-                <button type="button" class="btn btn-success find-btn1" th:onclick="|clickLikeOrDislike(*{id}, true)|">추천</button>
-                <span id="likeNum" th:value="*{likeNum}" th:text="*{likeNum}"></span>&nbsp;
-                <button type="button" class="btn btn-warning find-btn1" th:onclick="|clickLikeOrDislike(*{id}, false)|">비추</button>
-                <span id="dislikeNum" th:value="*{dislikeNum}" th:text="*{dislikeNum}"></span>
+                <button type="button" class="btn btn-success find-btn1" onclick="clickLikeOrDislike(true)">추천</button>
+                <span id="likeNum" th:value="${post.likeNum}" th:text="${post.likeNum}"></span>&nbsp;
+                <button type="button" class="btn btn-warning find-btn1" onclick="clickLikeOrDislike(false)">비추</button>
+                <span id="dislikeNum" th:value="${post.dislikeNum}" th:text="${post.dislikeNum}"></span>
             </div><br/>
             <div style="display: flex">
                 <button type="button" class="btn btn-secondary"
@@ -39,11 +38,12 @@
                 <span style="font-size:1.2em; font-weight:bold"><strong>댓글 </strong></span>
                 <span>댓글 개수 : </span><span id="cnt"></span>
                 <div id="comment"></div>
+
             </div>
             <div class="card-body">
                 <form name="comment-form" th:action="@{/comment/write}" method="post" autocomplete="off">
                     <div class="form-group">
-                        <input type="hidden" name="idx" th:value="*{id}" />
+                        <input type="hidden" name="idx" th:value="${post.id}" />
                         <textarea name="content" class="form-control" rows="3" cols="30" onkeydown="needLogin()"
                                   placeholder="로그인 후 댓글 작성이 가능합니다." th:if="!isAuthenticated"></textarea>
                         <textarea name="content" class="form-control" rows="3" cols="30"
@@ -65,7 +65,30 @@
     const content = [[${post.content}]];
     $("#content").html(content);
 </script>
-<script th:src="@{/js/clickLikeOrDislike.js}"></script>
+<script th:inline="javascript">
+    function clickLikeOrDislike(isLike) {
+        let id = $('input[name=idx]').val();
+        $.ajax({
+            type: 'POST',
+            url: '/post/' + id + '/click',
+            data: {isLike},
+            success: function(result) {
+                if (isLike) {
+                    $("#likeNum").html(result);
+                    $("#titleLike").html('공감 수 : ' + result);
+                    sendName([[${loginId}]] ,[[${post.id}]]);
+                } else {
+                    $("#dislikeNum").html(result);
+                }
+
+            },
+            error: function(result) {
+            },
+            complete: function() {
+            }
+        })
+    }
+</script>
 <script th:src="@{/js/needLogin.js}"></script>
 <script th:src="@{/js/commentDetail.js}"></script>
 </body>

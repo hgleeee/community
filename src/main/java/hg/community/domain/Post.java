@@ -72,7 +72,7 @@ public class Post extends TimeBaseEntity {
     }
 
     public PostDto toPostDto() {
-        return new PostDto(id, title, content, member.getNickname(), getCreatedDateTime(), views, likeNum, disLikeNum,
-                category.getParentCategory().getUrlName(), category.getParentCategory().getName());
+        return new PostDto(id, title, content, member.getLoginId(), member.getNickname(), getCreatedDateTime(), views, likeNum, disLikeNum,
+                category.getParentCategory().getUrlName(), category.getParentCategory().getName(), comments.size());
     }
 }

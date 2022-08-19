@@ -1,9 +1,13 @@
 package hg.community.repository;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hg.community.domain.QMember;
 import hg.community.dto.CommentDto;
 import hg.community.dto.QCommentDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

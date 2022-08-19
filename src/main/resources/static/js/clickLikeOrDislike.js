@@ -1,4 +1,4 @@
-function clickLikeOrDislike(id, isLike) {
+function clickLikeOrDislike(isLike) {
 
     $.ajax({
         type: 'POST',
@@ -8,9 +8,11 @@ function clickLikeOrDislike(id, isLike) {
             if (isLike) {
                 $("#likeNum").html(result);
                 $("#titleLike").html('공감 수 : ' + result);
+                sendName([[${loginId}]] ,[[${post.id}]]);
             } else {
                 $("#dislikeNum").html(result);
             }
+
         },
         error: function(result) {
         },

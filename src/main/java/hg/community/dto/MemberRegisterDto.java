@@ -32,7 +32,5 @@ public class MemberRegisterDto {
     @NotEmpty
     private String confirmPassword;
 
-    public Member toEntity() {
-        return Member.createMember(name, nickname, birthday, frontSixSSR, endSevenSSR, loginId, password, Role.USER);
-    }
+
 }

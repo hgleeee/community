@@ -1,6 +1,9 @@
+
+
 $(document).ready(function() {
     getCommentList();
 })
+
 
 function getCommentList() {
     const idx = $('input[name=idx]').val();

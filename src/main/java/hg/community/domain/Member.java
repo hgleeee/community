@@ -33,6 +33,12 @@ public class Member extends DateBaseEntity {
     private int exp;
     private Role role;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    private String addressDetail;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
@@ -62,7 +68,7 @@ public class Member extends DateBaseEntity {
     }
 
     public static Member createMember(String name, String nickname, LocalDate birthday, String frontSixSSR, String endSevenSSR,
-                                      String loginId, String password, Role role) {
+                                      String loginId, String password, Role role, Address address, String addressDetail) {
         Member member = new Member();
         member.name = name;
         member.nickname = nickname;
@@ -82,6 +88,8 @@ public class Member extends DateBaseEntity {
             member.exp = 0;
             member.level = 1;
         }
+        member.address = address;
+        member.addressDetail = addressDetail;
         return member;
     }
 

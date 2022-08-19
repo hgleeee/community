@@ -31,7 +31,7 @@ public class Category extends TimeBaseEntity {
     private List<Post> posts = new ArrayList<>();
 
     /** 연관관계 편의 메서드 시작 */
-    private void setParentCategory(Category category) {
+    public void setParentCategory(Category category) {
         this.parentCategory = category;
         parentCategory.getSubCategory().add(this);
     }

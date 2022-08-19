@@ -68,7 +68,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto findOneById(Long id) {
+    public PostDto findOneById(Long id) throws Exception {
         Optional<Post> optionalPost = postRepository.findById(id);
         if (optionalPost.isEmpty()) {
             throw new IllegalStateException("존재하지 않는 글입니다.");
